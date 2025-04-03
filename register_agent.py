@@ -13,7 +13,7 @@ from jinja2 import Template
 from loguru import logger
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
-
+import threading
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 try:
     import requests
@@ -26,6 +26,26 @@ health = HealthCheck()
 # Global variables for caching the token
 cached_token = None
 token_expiration = 0
+
+###added wazuh status check function
+def is_wazuh_running():
+    """Check if Wazuh agent is running using 'wazuh-control status' and log the output."""
+    cmd = ["/var/ossec/bin/wazuh-control", "status"]
+    process = Popen(cmd, stdout=PIPE, stderr=PIPE, encoding="utf8")
+    stdout, stderr = process.communicate()
+    # Log the raw output from the command
+   # logger.info(f"Wazuh status check output:\n{stdout.strip()}")
+    if "not running" in stdout:
+        return False
+    return True
+def monitor_wazuh_agent():
+    """Continuously check if Wazuh is running. If stopped, exit the script."""
+    while True:
+        if not is_wazuh_running():
+            logger.error("Wazuh agent has stopped! Exiting script...")
+            os._exit(1)  # Exit script if Wazuh stops
+        time.sleep(10)  # Check every 10 seconds
+
 
 def get_auth_token():
     global cached_token, token_expiration
@@ -383,6 +403,9 @@ if __name__ == "__main__":
     else:
         for group in list(groups.split(",")):
             add_agent_to_group(agent_id, group)
+    # Start Wazuh monitoring in a background thread
+    monitor_thread = threading.Thread(target=monitor_wazuh_agent, daemon=True)
+    monitor_thread.start()
     logger.info("Listening on 0.0.0.0:5000")
     server = HTTPServer(("0.0.0.0", 5000), RequestHandler)
     server.serve_forever()
