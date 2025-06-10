@@ -17,7 +17,8 @@ ENV JOIN_MANAGER_API_PORT="55000"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN install_packages \
-  procps curl apt-transport-https gnupg2 inotify-tools python3-docker python3-setuptools python3-pip && \
+  procps curl apt-transport-https gnupg2 inotify-tools python3-docker python3-setuptools python3-pip \
+  systemd systemd-sysv libsystemd-dev && \
   curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add - && \
   echo "deb https://packages.wazuh.com/4.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list && \
   install_packages wazuh-agent=${AGENT_VERSION}  && \
