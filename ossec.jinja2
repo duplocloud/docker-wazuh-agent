@@ -214,4 +214,9 @@
     <location>/var/log/maillog</location>
   </localfile>
 
+  <!-- For Falco integration -->
+  <localfile>
+    <location>/var/log/falco_events.json</location>
+    <log_format>json</log_format>
+  </localfile>
 </ossec_config>
