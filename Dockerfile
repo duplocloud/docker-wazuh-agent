@@ -44,7 +44,7 @@ ENV JOIN_MANAGER_API_PORT="55000"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 🔐 OS security upgrades + minimal packages
+#  OS security upgrades + minimal packages
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
       curl \
