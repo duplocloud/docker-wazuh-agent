@@ -1,9 +1,9 @@
-FROM  bitnami/minideb@sha256:de938f39d9158beea053b51c77b1478c1845a623f6c5b96402fe3ebce99b4612 as builder
+FROM  bitnami/minideb@sha256:2d8ac044cd89741c9e495eca847b4afd5b3a4ebff09f15aed4ce66e7fe75b698 as builder
 COPY requirements.txt /tmp
 RUN install_packages python3-pip python3-setuptools python3-dev gcc && \
      python3 -m pip wheel -w /tmp/wheel -r /tmp/requirements.txt
 
-FROM bitnami/minideb@sha256:bce8004f7da6547bc568e92895e1b3a3835e6dba48283fbbf9b3f66c1d166c6d
+FROM bitnami/minideb@sha256:2d8ac044cd89741c9e495eca847b4afd5b3a4ebff09f15aed4ce66e7fe75b698
 LABEL maintainer="support@opennix.ru"
 LABEL description="Wazuh Docker Agent"
 ARG AGENT_VERSION="4.11.1-1"
@@ -17,7 +17,8 @@ ENV JOIN_MANAGER_API_PORT="55000"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN install_packages \
-  procps curl apt-transport-https gnupg2 inotify-tools python3-docker python3-setuptools python3-pip && \
+  procps curl apt-transport-https gnupg2 inotify-tools python3-docker python3-setuptools python3-pip \
+  systemd systemd-sysv libsystemd-dev && \
   curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | apt-key add - && \
   echo "deb https://packages.wazuh.com/4.x/apt/ stable main" | tee /etc/apt/sources.list.d/wazuh.list && \
   install_packages wazuh-agent=${AGENT_VERSION}  && \

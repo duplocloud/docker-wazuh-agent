@@ -1,5 +1,5 @@
 <!--
-  Wazuh - Agent - Default configuration for amzn 2
+  Wazuh  - Agent - Default configuration for amzn 2
   More info at: https://documentation.wazuh.com
   Mailing list: https://groups.google.com/forum/#!forum/wazuh
 -->
@@ -192,6 +192,11 @@
   <localfile>
     <log_format>audit</log_format>
     <location>/var/log/audit/audit.log</location>
+  </localfile>
+
+  <localfile>
+   <location>journald</location>
+   <log_format>journald</log_format>
   </localfile>
 
   <localfile>
