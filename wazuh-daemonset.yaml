@@ -87,7 +87,10 @@ spec:
           readOnly: true  
         - mountPath: /etc/group
           name: etc-group
-          readOnly: true            
+          readOnly: true
+        - mountPath: /run/systemd/journal/socket
+          name: journal-socket
+          readOnly: true
       volumes:
       - name: docker-socket-mount
         hostPath:
@@ -121,4 +124,8 @@ spec:
           path: /etc/passwd
       - name: etc-group
         hostPath:
-          path: /etc/group          
+          path: /etc/group
+      - name: journal-socket
+        hostPath:
+          path: /run/systemd/journal/socket
+          type: Socket
