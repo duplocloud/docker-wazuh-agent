@@ -18,6 +18,7 @@ COPY requirements.txt /tmp/requirements.txt
 # Build wheels for target architecture
 RUN pip3 wheel \
     --no-cache-dir \
+    --break-system-packages \
     --wheel-dir /tmp/wheels \
     -r /tmp/requirements.txt
 
@@ -81,6 +82,7 @@ COPY --from=builder /tmp/wheels /tmp/wheels
 RUN pip3 install \
     --no-cache-dir \
     --no-index \
+    --break-system-packages \
     /tmp/wheels/* && \
     chmod +x /var/ossec/register_agent.py && \
     chmod +x /var/ossec/deregister_agent.py && \
