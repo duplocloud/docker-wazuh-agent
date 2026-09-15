@@ -16,9 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt /tmp/requirements.txt
 
 # Build wheels for target architecture
-RUN pip3 wheel \
+RUN pip3 install --no-cache-dir --break-system-packages wheel && \
+    pip3 wheel \
     --no-cache-dir \
-    --break-system-packages \
     --wheel-dir /tmp/wheels \
     -r /tmp/requirements.txt
 
