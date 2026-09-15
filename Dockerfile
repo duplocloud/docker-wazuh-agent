@@ -83,6 +83,7 @@ RUN pip3 install \
     --no-cache-dir \
     --no-index \
     --break-system-packages \
+    --ignore-installed \
     /tmp/wheels/* && \
     chmod +x /var/ossec/register_agent.py && \
     chmod +x /var/ossec/deregister_agent.py && \
