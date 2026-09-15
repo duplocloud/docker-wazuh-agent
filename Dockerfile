@@ -57,6 +57,9 @@ RUN apt-get update && apt-get upgrade -y && \
       python3-setuptools \
       python3-docker \
       openjdk-17-jre-headless \
+      systemd \
+      systemd-sysv \
+      libsystemd-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # Wazuh repo (secure keyring)
