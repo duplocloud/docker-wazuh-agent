@@ -15,11 +15,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt /tmp/requirements.txt
 
-# Build wheels for target architecture
-RUN pip3 install --no-cache-dir --break-system-packages wheel && \
+# Build wheels including pinned pip/setuptools/wheel for runtime upgrade
+RUN pip3 install --no-cache-dir --break-system-packages --ignore-installed wheel && \
     pip3 wheel \
     --no-cache-dir \
     --wheel-dir /tmp/wheels \
+    "pip>=26.2.0" \
+    "setuptools>=83.0.0" \
+    "wheel>=0.46.2" \
     -r /tmp/requirements.txt
 
 
@@ -82,9 +85,12 @@ COPY --from=builder /tmp/wheels /tmp/wheels
 RUN pip3 install \
     --no-cache-dir \
     --no-index \
+    --find-links /tmp/wheels \
     --break-system-packages \
     --ignore-installed \
-    /tmp/wheels/* && \
+    pip setuptools wheel \
+    requests Jinja2 urllib3 certifi idna \
+    py-healthcheck psutil loguru markupsafe && \
     chmod +x /var/ossec/register_agent.py && \
     chmod +x /var/ossec/deregister_agent.py && \
     rm -rf /tmp/* && \
